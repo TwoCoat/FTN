@@ -140,4 +140,159 @@ vrednosti?
 - Ovakav problem naziva se **izlazak van opsega**
 - **Neophodno** je uočiti da opseg i izlazak zavise od načina na koji posmatramo podatke
 > Ukoliko tokom izvršavanja operacije se promeni vrednost najznačajnije cifre, došlo je do izlaska van opsega **ukoliko su brojevi smatrani označenim**, u suprotnom nije došlo do problema
-
+##### Poređenje celih brojeva
+- Kod određivanja relacija, izlazak van opsega pri *celobrojnom oduzimanju* (tj. sabiranju) zapravo nam pomaže da izvedemo ispravan zaključak
+- U knjizi je opisana kompl. `10` te je najbolje pogledati tekst na `12.` strani 
+> za više informacija pogledati kako radi oduzimanje u kompl. `2` predstavi; ukratko, oduzimanje dva označena broja svodi se na sabiranje; ukoliko je poz. po apsolutnoj vrednosti veći pri sabiranju sa negativnim desiće se da najznačajniji bit rezultata, koji označava predznak, bude `0` i imaćemo u prenosu `1`. Pogledati [vežbe V2](Beleške.md#:~:text=sabiranje%20negativnog%20i%20pozitivnog%20dela%20svodi%20se%20na%20to%20da%20je%20za%20pozitivni%20broj%20bit%20najve%C4%87e%20vrednosti%20uvek%200%2C%20a%20ostali%20koji%20su%201%20dodaju%20vrednost%20onom%20pozitivnom%20delu)
+##### Višestruka preciznost
+- U zavisnosti na implementaciju, postoji ograničenje broja cifara sa kojim možemo raditi
+- Da bi premostili ovaj problem koristimo višestruku preciznost
+- Višestruka preciznost predstavlja korišćenje više nesekvencijalnih mem. lokacija za skladištenje podataka
+- U radu sa višestrukom preciznošću mora se obrati pažnja na redosled obrađivanja podataka, te prvobitno radimo sa najmanje značajnim delovima vrednosti, a potom značajnijim
+##### Zakoni aritmetike
+- Za aritmetiku ograničenog broja cifara ne važe zakoni aritmetike
+- Ukoliko u bilo kom trenutku dođe do izlaska van opsega mi ne možemo predstaviti tu vrednost, te se cifra odbacuje
+- Zbog ovoga je izuzetno važno paziti na redosled operacija
+#### 2.2. Predstavljanje realnih brojeva
+- Poziciona predstava koju smo koristili u kompl. 10 nije efikasna zbog ogromnog broja cifara koje zahteva
+> Računar za svoje potrebe zauzima određeni prostor, te tom prostoru se ne može olako pristupati jer možemo promeniti bitne podatke. Iz tog razloga kada se odvaja prostor za neki podatak odvaja se uvek fiksni deo memorije, međutim taj prostor nije uvek dobro iskorišćen. Više reči u sledećem primeru
+- Realni broj 0.000000127 zauzima više cifara od dosada korišćenjih, te ga ne možemo predstaviti
+- Najveći problem su mnogobrojne nule kojih se možemo rešiti u **normalizovanoj formi** 1.27 * 10^-7
+- Najmanje prostora zauzima **mašinska normalizovana forma**, koja čitajući sa leva u desno ima sledeći raspored
+- Najznačajnija cifra je predznak (`0` je `+`, `1` je `-`)
+- Naredne dve cifre predstavljaju eskponent, tj. stepen konstante podešavanja
+> U našem slučaju, stepen je `-7` dok je konstanta podešavanja `10`
+- Preostalih sedam cifara sadrži frakciju, te dobijamo `0031270000`
+> Dati primer MNF je za u kompl. `10` i uzet je iz knjige
+- Ogromni problem sa kojim se susrećemo jeste preciznost predstavljanja realnih brojeva, ponajviše kod sabiranja dva broja čiji se eksponenti mnogo razlikuju
+##### Aritkemika mašinske normalizovane forme
+- **Predznak, podešeni eksponent i frakcije posmatraju se odvojeno**
+- Prvo se određuje predznak rezultata
+- Pre *sabiranja* i *oduzimanja* neophodno je izjednačiti eksponente
+- Uvek se manji eksponent izjednačava sa većim, gde se pritom cifre frakcije pomeraju za jedno mesto udesno, gde je **moguće odbacivanje cifri**
+- Nakon izjednačavanja eksponenata sledi sabiranje frakcija
+- Kod *množenja*, eksponenti se sabiraju uz umanjivanje njihogov zbira za konst. podešavanja, a frakcije množe
+- Kod *deljenja*, eksponenti se oduzimaju uz uvećavanje njihove razlike za konst. podešavanja, a frakcije dele
+- Zbog odbacivanja suvišnih cifara frakcije, izlazak van opsega pojavljuje se samo kod eksponenata
+#### 2.3. Binarni brojni sistem
+> konačno smo pobegli od kompl. `10`
+- U binarnom brojevnom sistemu koriste se samo cifre `0` i `1` , baza ovog sistema je dekadna dvojka
+- Pre prelaska iz decimalnog (ili bilo kog drugog) u binarni brojevni sistem neophodno je izvršiti **konverziju**
+- Postupak konverzije različit je za celi deo i razlomljeni deo broja
+> Preporučeno je da se pronađe video na temu konverzija radije nego čitati iz knjige, međutim biće objašnjeno i ovde
+###### Iz decimalnog u binarni
+- Konvertovanje celog broja svodi se na deljenje broja sa bazom `2` (dekadna dvojka) i zapisivanja ostatka pri deljenju, dok količnik ponovo delimo; Zapis ostatka vrši se sa desna na levo; Postupak se ponavlja dok količnik ne bude jednak `0`
+> $9 : 2 = 4$, `R(1) ->` $4 : 2 = 2$, `R(0) ->` $2 : 2 = 1$, `R(0) ->` $1 : 2 = 0$, `R(1)`
+ `krajnji broj je 1001`
+- **Pogledati** ovaj video https://youtu.be/lUdRbZDBgEE
+- Konverzija razlomljenog dela svodi se na množenje dekadnom dvojkom, gde posle svakog množenja uzimamo celi deo proizvoda i zapisujemo sa strane; Kraj ovog postupka je kada frakcija postane `0`; Krajni zapis sa desna ulevo tako što pišemo prvu uzetu cifru celog dela broja    
+> $0.375 * 2 = 0.75$ `pišemo 0 ->` $0.75*2 = 1.5$, `pišemo 1 nastavljamo sa 0.5 ->` $0.5 * 2 = 1.0$ `pišemo 1 i završavamo jer nam je ostala samo 0`
+> konačan broj je 0.011 u binarnom brojevnom sistemu
+- Ukoliko se konvertuje realni broj poput `23.75` ceo broj se posmatra odvojeno od razlomljenog, a potom se zapisuju zajedno kao `10111.11`
+###### Iz binarnog u decimalni 
+- Konverzija iz binarnog u decimalni celi broj zasniva se čitanjem jedne po jedne cifre sa desna ulevo, množenjem te cifre sa stepenom dvojke, gde je prvi stepen `0`, i sabiranjem dobijenih rezultata
+> `1001101` je zapravo $1*2^7 + 0  * 2^6 +$ ... $+0*2^1 + 1*2^0$
+- Konverzija razlomljenog dela u decimalni brojevni sistem svodi se na uzimanju pojedinačne cifre sa leva udesno i množenja sa 2 na neki celobrojni stepen, počevši od -1, te tako sabiranjem svakog proizvod sa sledećim
+> `0.0011` je zapravo $0*2^-1+0*2^-2+1*2^-3+1*2^-4 = 0.1875$ 
+- Iz primera u knjizi videli smo da `0.2` konvertovano u binarni zapis je `0.0011`, međutim kada konvertujemo `0.0011` u decimalni dobijamo `0.1875`. Izgubili smo preciznost za `0.125`
+###### Heksadecimalni
+- Za skraćeno predstavljanje brojeva iz binarnog sistema koristi se heksadecimalni brojevni sistem
+- Jedna heksadecimalna cifra odgovara tačno četiri binarne 
+- Heksadecimalne cifre su od `0` do `9` dok su ono što bi decimalno bili brojevi `10, 11 , 12, 13, 14 , 15` cifre `A, B, C, D, E, F`
+- Konverzija iz heksadecimalni u binarni brojevni sistem svodi se na uzimanje pojedinačne cifre, uzimanje njene decimalne vrednosti i prebacivanje u binarni brojevni sistem
+> `E` je zapravo decimalno 14, što je binarno `1110`
+- Konverzija iz binarnog u heksadecimalni radi se obrnutim redosledom
+#### 2.4. Aritmetika ograničenog broja cifara u binarnom sistemu
+- Princip je vrlo sličan radu opisanom u poglavljima kompl. `10`
+- Binarni brojevni sistem radi u okviru predstave kompl. `2`
+- Kompl. 2 predstava pozitivni se svodi na dodavanje nula do popunjavanja prostora
+> 011 -> 00000011
+- Kompl. 2 predstava negativnih se svodi na pisanje apsolutne vrednosti, potom komplementiranje svake cifre i uvećavanja rezultata za jedinicu
+> -2 -> apsolutna vrednost 2 -> 00000010 kompl. -> 11111101 uvećavanje za 1 -> 11111110
+##### Izlazak van opsega
+- Kod obrade podataka neophodno je voditi računa o najznačajnijem bitu i njegovom stanju
+- Ukoliko su brojevi posmatrani kao *neoznačeni* dozvoljena je promena najznačajnijeg bita, te to **ne predstavlja** izlazak van opsega
+- Ukoliko su brojevi posmatrani kao *označeni*, i prilikom izvršavanja naredbi dođe do promene koja *nije prirodna* (dva negativna sabrana daju pozitivni) znamo da je došlo do izlaska van opsega
+- Sledeća tablica prikazuje moguće slučajeve o kojim treba promisliti
+![slika](../slike/tablica_+_i_van_opsega.png)
+- U knjizi je data i sledeća tablica za oduzimanje 
+![slika](../slike/tablica_-_van_opsega.png)
+- **Interpretacija rezultata aritmetičkih operacija zavisi od interpretacije brojeva**
+##### Poređenje celih brojeva
+- Poređenje se svodi na oduzimanje prvog operanda od drugog i tumačenje rezultata
+- Za opisivanje karakteristika razlike (sabiranja) zgodno je uvesti posebne **logičke promenljive** 
+- *N* (nula) će u sebi sadržati `1` ako je rezultat operacije bio **nula**. U supronom sadrži `0` 
+- *M* (minus) će u sebi sadržati 1 ako je rezultat operacije **negativna**. Ova logička promenljiva **jednaka je najznačajnijem bitu razlike**
+- P (prenos) će u sebi sadržati 1 ukoliko je došlo do prenosa na najznačajnijem bitu, kome je i jednaka.
+- V (van opsega) će sadržati 1 ako pri oduzimanju označenih celih brojeva **razlika izađe van opsega**. Ova log. promenljiva jednaka je zadnjoj koloni na slici 2.4.2 iznad ovog teksta
+- **VAŽNO:** Pri svakom oduzimanju uvek će se stanja ovih promenljivi menjati zbog višeznačnog shvatanja i posmatranja brojeva
+##### Višestruka preciznost
+- Problem nemanja dovoljno binarni cifara za prikaz i čuvanje rezultata rešava se uvođenjem višestruke preciznosti
+- Delovi vrednosti nalaze se na različitim mem. lokacijama
+- Pri radu u višestrukoj preciznost važno je poštovati redosled značajnosti cifara
+##### Zakoni aritmetike
+- Zbog mogućeg izlaska van opsega zakoni aritmetike **ne vaze** 
+- Obavezno obratiti pažnju na redosled izvršavanja operacija
+#### 2.5. Predstavljanje vrednosti realnog tipa u binarnom brojevnom sistemu
+- **Mašinska normalizovana forma** se koristi i u binarnom brojevnom sistemu za predsatvljanje vrednosti realnog tipa
+- Gledajući sa leva udesno raspored cifara je sledeći za MNF8 (osam cifara)
+- Prva cifra sadrži predznak (`0` je `+`, `1` je `-`)
+- Naredne `4` cifre sadrže **podešeni eksponent** (govori nam gde se nalazi tačka)
+- Kao konstanta podešavanja koristi se **vrednost 8**
+- Eksponent može biti od `-8` do `7` i sabira se sa konst. podešavanja
+- Poslednje tri pozicije sadrže tri manje značajne cifre frakcije
+- Preostala najznačajnija cifra frakcije je `1`, koja je kod norm. forme podrazumevana
+- Nailazimo na iste probleme kao kod kompl. `10`, a to su preciznost i opseg brojeva mogućih za predstavljanje
+- Sva navedena pravila aritmeke za kompl. 10 predstavu važe i za kompl. 2 predstavu brojeva, te samo kod eksponenta može doći do izlaska van opsega
+##### Višeznačna interpretacija celih brojeva
+- Već je bilo reči o višeznačnoj interpretaciji brojeva gde isti sled cifara može predstavljati dva dijematralno različita podatka
+- Zbog ovoga, neophodna je konverzija, ukoliko se vrednost jednog tipa dodeljuje promenljivoj drugog tipa
+> Pogledati primer u knjizi na strani `25.`
+- **VAŽNO:** Konverzije nisu uvek moguće, jer MNF pokriva veći opseg vrednosti od celog tipa
+#### 2.6. Pitanja
+1. Šta omogućuje komplement predstava označenih brojeva?
+> ???
+2. Kako komplement predstava pojednostavljuje procesor?
+> Sve aritmetičke operacije moguće je predstaviti preko sabiranja i komplementiranja
+3. Kada se (ne) zanemaruje prenos sa najznačajnije pozicije prilikom
+aritmetike celih brojeva?
+> Ukoliko su brojevi neoznačeni
+4. Šta ukazuje na izlazak van opsega?
+> Kod označenih brojeva pojava neodgovarajuće cifre najznačajnijeg bita
+5. Koje delove sadrži mašinska normalizovana forma?
+> Predznak, podešeni eksponent i frakciju
+6. Zašto je uvedena konstanta podešavanja (kako se ona koristi)?
+> ???
+7. Kako se obavlja aritmetika brojeva predstavljenih mašinskom
+normalizovanom formom?
+> Svaki deo se posmatra zasebno, predznaci se upoređuju, nad podešenim eksponentima se vrše posebne operacije, što važi i za frakciju
+8. Gde dolazi do izlaska van opsega u aritmetici mašinske normalizovane
+forme (u eksponentu ili frakciji)?
+> Dolazi jedino u eksponentu
+9. Gde se odbacuju prekobrojne cifre u aritmetici mašinske normalizovane
+forme (u eksponentu ili frakciji)?
+> Prekomerne cifre se izbacuju iz frakcije
+10. Kako se obavljaju konverzije brojeva iz decimalnog u binarni brojni
+sistem (i obrnuto)?
+> Deljenjem sa bazom binarnog sistema i zapisivanjem ostatka `0` ili `1` u redosledu sa leva udesno
+11. Koji binarni broj se dobije nakon konverzije decimalnog broja 4.25?
+> ??? Nije naglašeno da li se znak beleži, koja je konst. podešavanja
+12. Koji decimalni broj se dobije nakon konverzije binarnog broja 100.01?
+> ??? Nije naglašeno da li se znak beleži, koja je konst. podešavanja
+13. Koji heksadecimalni broj se dobije nakon konverzije binarnog broja
+11010?
+> 1 A
+14. Koji binarni broj se dobije nakon konverzije heksadecimalnog broja 1A?
+> 11010
+15. Koja je komplement 2 predstava binarnog broja -100?
+> `-100 -> 100 -> 01100100 -> 10011011 -> 10011100`
+16. Da li se prilikom sabiranja binarnih brojeva 01000100 i 01110000 javlja
+izlazak van opsega (za obe interpretacije ovih brojeva)?
+>  Označeni: DA Neoznačeni: NE
+17. Na osnovu čega se određuje važenje relacija između (ne)označenih
+brojeva?
+> ???
+18. Koja je mašinska normalizovana forma (MNF8) binarnog broja -101?
+> ???
+19. Koji binarni broj odgovara mašinskoj normalizovanoj formi
+11010010MNF8?
