@@ -187,6 +187,7 @@ vrednosti?
 > $9 : 2 = 4$, `R(1) ->` $4 : 2 = 2$, `R(0) ->` $2 : 2 = 1$, `R(0) ->` $1 : 2 = 0$, `R(1)`
  `krajnji broj je 1001`
 - **Pogledati** ovaj video https://youtu.be/lUdRbZDBgEE
+- **Pogledati** ovaj video radi razumevanja MNF https://youtu.be/bbkcEiUjehk
 - Konverzija razlomljenog dela svodi se na množenje dekadnom dvojkom, gde posle svakog množenja uzimamo celi deo proizvoda i zapisujemo sa strane; Kraj ovog postupka je kada frakcija postane `0`; Krajni zapis sa desna ulevo tako što pišemo prvu uzetu cifru celog dela broja    
 > $0.375 * 2 = 0.75$ `pišemo 0 ->` $0.75*2 = 1.5$, `pišemo 1 nastavljamo sa 0.5 ->` $0.5 * 2 = 1.0$ `pišemo 1 i završavamo jer nam je ostala samo 0`
 > konačan broj je 0.011 u binarnom brojevnom sistemu
@@ -245,8 +246,17 @@ vrednosti?
 - Eksponent može biti od `-8` do `7` i sabira se sa konst. podešavanja
 - Poslednje tri pozicije sadrže tri manje značajne cifre frakcije
 - Preostala najznačajnija cifra frakcije je `1`, koja je kod norm. forme podrazumevana
+- Opet pogledati ovaj video https://youtu.be/bbkcEiUjehk
+- Ukratko: eksponent je stepen na koji stepenujemo bazu sistema; potom frakciju sa dodatom *podrazumevanom* jedinicom tako da imamo `1.010` množimo sa 2^n
 - Nailazimo na iste probleme kao kod kompl. `10`, a to su preciznost i opseg brojeva mogućih za predstavljanje
 - Sva navedena pravila aritmeke za kompl. 10 predstavu važe i za kompl. 2 predstavu brojeva, te samo kod eksponenta može doći do izlaska van opsega
+- Iz binarne mašinski normalizovane forme u decimalni zapis dolazimo kroz par koraka
+1. Odredimo znak na osnovu prvog bita
+2. Sračunamo frakciju na osnovu već opisanog postupka
+>`.0011000000...` je zapravo $0*2^-1+0*2^-2+1*2^-3+1*2^-4 = 0.1875$
+3. Na sračunatu frakciju sa desne strane dodajemo `1` tako da dobijemo `1.1875`
+4. Potom množimo sa bazom sistema, što je `2`, na stepen koji daje konvertovani eksponent u decimalni broj
+- U KNJIZI NIJE OBJAŠNJENO KAKO SE IZ REALNOG DOLAZI DO BINARNOG
 ##### Višeznačna interpretacija celih brojeva
 - Već je bilo reči o višeznačnoj interpretaciji brojeva gde isti sled cifara može predstavljati dva dijematralno različita podatka
 - Zbog ovoga, neophodna je konverzija, ukoliko se vrednost jednog tipa dodeljuje promenljivoj drugog tipa
@@ -299,3 +309,53 @@ brojeva?
 > `-101 -> 101 -> 01100101 -> 10011010 -> 100011011`
 19. Koji binarni broj odgovara mašinskoj normalizovanoj formi
 11010010MNF8?
+> 
+### 3. Asemblersko programiranje
+#### 3.1. Nivoi programiranja
+- Kada se dva nivoa programiranja upoređuju, kažemo da je onaj koji sadrži **apstrakciju** (zanemarivanje) viši nivo
+- Apstrakcija je vid zanemarivanja formata naredbi ili čitave arhitekture, koje su zamenjene nekim uopštenijim 
+- Asemblerski i mašinski jezici svrstavaju se u grupu **programskih jezika niskog nivoa**đ
+- Procedurni jezici se usled svoje prirode apstrakcija svrstavaju u **programske jezike visokog nivoa**
+- Prednost programiranja na niskom nivou jeste potpuno iskorišćavanje mogućnosti računara, međutim mana je prekopotrebno razmišljanje o arhitekturi naredbi
+#### 3.2. Arhitektura naredbi procesora *KONCEPT*
+- Memorija procesora *KONCEPT* sastoji se od lokacija veličine **`16` bita**
+- Krajnje desni bit je najmanje značajna cifra, odnosno krajnje levi bit je najznačajnija cifra
+- Indeksi cifara su od `0` do `15`
+- **Pristupanje memorijskoj lokaciji podrazumeva pristupanje svim njenim bitima**
+- Adresni prostor procesora *KONCEPT* obuhvata 2^16 različitih adresa i njima pripadnih lokacija
+- Procesor *KONCEPT* ima ukupno `16` **registara opšte namene**
+- Registri su označeni kao komb. indeksa od `0` do `15` i znaka `%`, tj. `%0, %1, ... %14, 15`
+- Svaki od registara opšte namene uređen je kao mem. lokacija
+- Procesor *KONCEPT* poseduje i **status registar**, koji je takođe uređen kao mem. lokacija
+- Najmanje značajni bit sadrži vrednost log. promenljive *N*, sledeći bit *M*, sledeći bit *P*, i četvrti bit (indeksno 3) *V*
+- Procesor *KONCEPT* podržava neposredno, direktno, registarsko, posredno i indeksno adresiranje
+##### Naredbe za celobrojnu aritmetiku
+- *SABERI* sabira vrednost *PO* sa vrednošću *DO* (prvog i drugog operanda) i rezultat odlaže u drugom
+- *SABERI_P* isto kao i *SABERI*, međutim dodaje vrednost promenljive *P* krajnjem rezultatu
+- *DODAJ_1* uvećava vrednost ulaznog operanda za `1`
+- *ODUZMI* oduzima vredn. *PO* od vredn. *DO* i odlaže rezultat u drugom
+- *ODUZMI_P*  od krajnjeg rezultata oduzimanja oduzme i vredn. log. promenljive *P*
+- *ODBIJ_1* umanjuje vrednost ulaznog operanda za `1`
+- *UPOREDI* radi isto što i *ODUZMI*, međutim ne čuva rezultat. Postavlja vredn. log. promenljivih *N, M, P i  V* u skladu sa razlikom
+##### Naredbe za rukovanje bitima
+- Procesor *KONCEPT* podržava logičke naredbe: *I ILI i NE*; primena log. funk. se radi za svaki par bitova iz *PO* i *DO*  
+- Pristupanje pojedinim bitima omogućavaju i naredbe *LEVO* i *DESNO*
+- *LEVO* pomeranje svih bita binarne vrednosti *PO* za jedno mesto ulevo, što je isto množenju sa brojem `2`
+- *DESNO* predstavlja obrnutu naredbu od *LEVO*; predstavlja i deljenje sa `2`
+- Problem nastaje ukoliko je deljenik negativan, gde je neophodno voditi računa o znaku novodobijenog rezultata
+##### Naredbe prebacivanja
+- *PREBACI* prebacuje vrednost određenu *PO* u lokaciju određenu *DO*
+- Izvršavanje ove naredbe **ne menja** vrednosti *N, M, P i V*
+##### Upravljačke naredbe
+-  Mašinski oblici prethodnih naredbi se smeštaju, u redosledu izvršavanja, u memorijske lokacije sa uzastopnim rastućim adresama
+- Ovakav raspored je koristan zbog direktno ukazivanja koja naredba se izvršava posle koje
+- Problem ovakvog rasporeda je rad sa vrednostima koje **zavise od obrađivanih podataka** 
+- Kao rešenje uvode se **uslovne i bezuslovne upravljačke naredbe**
+- Jedini operand ovih naredbi predstavlja mem. lokaciju na kojoj se nalazi naredba koja, ukoliko je uslov ispunjen, se treba izvršiti sledeća
+![slika](../slike/tablica_skokova.png)
+- Zbog slove uloge, log. promenljive *N, M, P i V* se ujedno nazivaju i **uslovni biti**
+- Procesor *KONCEPT* podržava bezuslove upravljačke naredbe: **SKOČI, POZIVI i NATRAG**
+- *SKOČI* ima jedan operand koji određuje adresu naredbe koja će se izvršiti nakon izvršavanja  naredbe *SKOČI*
+- *POZOVI* ima jedan operand koji određuje adresu naredbe, i pritom menja vrednost registra `%15` u adresu **sledeće naredbe posle *SKOČI**
+- Adresa smeštena u registar `%15` naziva se  **povratna adresa**
+- *NATRAG* nema operanada; Pozivanjem ove naredbe redosled izvršavanja se vraća na naredbu čiju adresu sadrži registar`%15`; **Podrazumeva se** da registar `%15` sadrži povratnu adresu, koju je prethodno upisala naredba *POZOVI*
