@@ -391,6 +391,7 @@ brojeva?
 - Izmenjivanje pojedinačnih vrednosti bitova moguće je koriščenjem **maski** i odgovarajuće logičke funkcije
 #### 3.5. Potprogram
 - **Potgram** omogućuje opisivanje izračunavanje vrednosti, odnosno opisivanje rukovanja strukturama podataka, koje je odvojeno od glavnog programa
+- Potprogram nije ništa drugo do skup naredbi koji je osmišljen da uzima vrednosti nekog drugog programa, da ih obradi i potom upiše, tj. vrati
 - **Opis** potprograma prate njegovi **pozivi**
 - Ovo je veoma korisno jer možemo pozivati potprogram samo na osnovu poznavanja neophodnih parametara, bez da znamo čitavu strukturu potprograma
 - Upotreba **parametara** pomaže nam da potprogram se može izvršavati više puta, tokom kojih obrađuje različite podatke
@@ -401,3 +402,71 @@ brojeva?
 - Lokalne promeljive potprograma se nazivaju i **dinamičke**, iz razloga što postoje samo u toku izvršavanja potprograma, za razliku od **statičkih** i **globalnih**
 - **Područje važenja** ili opseg promenljivih vezan je za deo u kom je pomenuta promenljiva opisana, ukoliko je to potprogram, ona će postojati od trenutka njihovog definisanja do kraja izvršavanja potprograma, ukoliko je to glavni program, postojaće od trenutka definisanja do kraja izvršavanja 
 - Potprogrami se dele na **funkcije** i **procedure**
+- *Funkcije* omogućuju opisivanje preuzimanja vrednosti promenljivih i potom izračunavanje; Funkcije imaju samo **jednu povratnu vrednost**; 
+- *Procedure* omogućuju opisivanje preuzimanje vrednosti promenljivih i izmenu njihovih vrednosti; Mogu da imaju više **ulazno-izlaznih parametara**
+##### Asemblerski oblik potprograma
+- Programer se mora pobrinuti za: prenos argumenata, poziv potprograma i povratak iz potprograma nakon završetka izvršavanja
+- Za pozivanje koristimo upravljačku naredbu *POZOVI* koja smešta povratnu adresu **u registar `%15`**, i pritom omogućuje izvršavanje potprograma
+- Za povratak iz potprograma koristimo upravljačku naredu *NATRAG* 
+- Registri procesora *KONCEPT* mogu biti iskorišćeni za prenos argumenata **osim rezirvisanog registra `%15` čija se adresa ne sme ručno menjati**
+#### 3.6. Makro
+- Korišćenje potprograma povećava broj naredbi zbog podešavanja parametara, kao i koriščenja upravljačkih naredbi *POZOVI* i  *NATRAG* 
+- Međutim, ukoliko je neophodno izvršiti određeni sled operacija više puta, korišćenje potprograma može **znatno skratiti broj naredbi**
+- **Makro potprogram** predstavlja posebnu labelu koja se, tokom prevođenja asemblerskih naredbi u mašinske naredbe, zamenjuje **naredbama tela makroa** 
+- Da bi bilo moguće koristiti makroe, neophodno je da postoji **definicija makroa**, tj. opis potprograma, i sam **poziv makroa** koji označava mesto korišćenja makroa
+- Ukoliko definicija makroa zahteva parametre, poziv mora sadržati odgovarajuće argumente
+- Zamenu makro poziva obavlja poseban program koji se naziva **makro pretprocesor**
+- Pre nego što asembler stigne da prevede tekst, makro pretprocesor obradi isti tako što umesto makroa upisuje naredbe iz njegovog tela <br />
+ ![slika](../slike/zamena_makroa_tablica.png)<br />
+- **VAŽNO:** Glavna razlika između potprograma i makroa jeste što telo potprograma **postoji samo jednom**, dok se telo makroa **zamenjuje sa svakim pojavljivanjem labele** koja taj makro označava
+- Time rečeno, korišćenjem poziva potprograma, redosled izvršavanja bi se promenio i započelo bi izvršavanje potprograma, nakon kojeg bi se vratio u glavni
+- Korišćenje makroa bi umetnulo linije naredbe **tokom prevođenja** u niz naredbi i one se ne bi izvršile dokle god ne dođe red na njih
+- **VAŽNO:** Upotreba potprograma nam takođe omogućava da ga pozovemo i iz nekog drugog programa, bez da moramo opet pisati isto telo
+##### Opis makro definicija i makro poziva
+- **Pogledati definicije sintakse od `51.` strani**
+- Makro ime sme **imati najviše `30` znakova**
+- U makro pozivu se koristi ime prethodno definisanog makroa, gde zadati argumenti prate redosled definisanih parametara
+##### Primeri  makro definicija i makro poziva
+- Pogledati primer u knjizi na `52.` strani
+- Višestruki pozivi makroa u jednom asemblerskom programu izazivaju višestruku pojavu istih labela
+- Ovaj problem se javlja ili korišćenjem parametara na mestu spornih labela ili prepuštanje rešavanja problema pretprocesoru
+> Verovatno se misli da korišćenje parametara znači korišćenje registara umesto labeli, mada knjiga ovo ne razjašnjava
+##### Makro definicija sa makro definicijom
+- Moguće je da telo makro def. sadrži telo druge makro def.
+- Pri tome poziv unutrašnjeg makroa mora slediti odmah nakon poziva spolašnjeg makroa
+- Pogledati primer na `53.` strani knjige
+- Primer u knjizi prikazuje makro kom se prosleđuju određeni argumenti
+- Prosleđeni argumenti se koriste za definiciju unutrašnjeg makroa
+- Potom prvi prosleđeni argument, koji nam je takođe poziv makroa, se prosleđuje njegovom definicijom koju smo prethodno definisali
+##### Uslovno asembliranje
+- Za uslovno asembliranje potrebna je uslovna direktiva koja određuje pod kojim uslovom makro pretprocesor šalje sadržaj tela uslovne direktive na asembliranje
+- Ukoliko uslov nije ispunjen, telo uslovne direktive se ne uključuje u asemblerski program
+- **Pogledati pravila na strani `54.`**
+- Uslovna direktiva je upućena makro pretprocesoru, što znači da nije izvršne prirode
+#### 3.7. Stek
+> nije 64
+- Ukoliko se prisetimo, korišćenjem naredbe *POZOVI* u registar `%15` smešta se povratna adresa, i to je moguće čuvanje **samo jedne**
+- Zbog prirode ove naredbe, nije moguće pozivanje iz potprograma u potprogram, jer bi došlo do **promene povratne adrese**
+- Povratak iz potprograma vrši se u obrnutom redosledu od pozivanja, jer se vraćamo natrag iz najskorašnjeg poziva u onaj pre i tako do glavnog programa
+> Ovo je moguće zamisliti kao oblačenje više jakni; Ukoliko ste obukli 5 jakni, i želite da direktno izvučete nešto iz džepa prve jakne, to jednostavno nije izvodljivo; Prvobitno biste morali da skinete petu, potom četvrtu, i tako sve jakne do prve. Ovo je princip rada stek.
+- Problem sa kojim se susrećemo je čuvanje povratnih adresa, i to u tačnom redosledu kako ne bismo zalutali i poremetili rad programa
+- Za naše potrebe uvodi se struktura pod imenom **stek**, te ćemo sada opisati šta je 
+- Stek predstavlja niz memorijskih lokacija u koje se podaci upisuju u nedvosmisleno jednom smeru, dok se podaci čitaju u obrnutom
+- Stek je osmišljen sa idejom da se podaci upisuju jedan za drugim i da se tako čitaju
+>Sa steka bi trebalo čitati samo podatak koji je zadnji upisan, međutim kao što ćemo to videti, ovo pravilo se često krši radi olakšanog rada sa podacima
+- Ukoliko se pomenute povratne adrese smeštaju u niz mem. lokacija u opisanom redosledu, tako da su one jedna do druge od prvobitno upisanje po poslednje, tada je jedino neophodno poznavati adresu lokacije do koje je niz popunjen
+- Od ove lokacije se nastavlja punjenje niza, tj. našeg steka
+- Za čuvanje adrese do koje je stek popunjen koristi se **pokazivač steka**, čiju ulogu ima određeni registar <br />
+![slika](../slike/prikaz_steka.png)<br />
+- Rukovanje stekom obuhvata: zauzimanje memorijskih lokacija za stek, pripremu steka za korišćenje (odnosno, inicijalizaciju pokazivača steka), smeštanje sadržaja u stek i preuzimanje sadržaja sa steka
+##### Frejm ili okvir
+- Stek se koristi za čuvanje povratne adrese, lokalnih promenljivih i prenos argumenata u potprogram
+- Skup lokacija na steku koje sadrže povratnu adresu i argumente naziva se **frejm** 
+- Frejm nastaje prilikom poziva potprograma, a nastaje po povratku iz potprograma
+- Lokacijama na steku moguće je pristupati putem pokazivača steka, međutim postojanje više frejmova na steku stvara problem raznavanja gde počinje i gde se završava određeni frejm
+- Za reševanje ovog problema uvodi se **pokazivač frejma** ili kako se stručno zove, bazni pokazivač
+- Ulogu pokazivača frejma ima registar koji sadrži početnu adresu frejma, tj. baznu lokaciju
+- Da bi se, za svaki postojeći frejm, mogao odrediti njegov par pokazivača zgodno uvezati frejmove u listu
+> Knjiga ovde ne napominje šta misli pod uvezivanjem u listu
+- Ovo se postiže tako što baza najmlađeg frejma sadrži vrednost stek pokazivača prethodnog frejma; Ta vrednost je. adresa mem. lokacije do koje je poslednji frejm napunjen
+- **VAŽNO:** Trenutni pokazivač steka sadrži adresu iste mem. lokacije kao i 
