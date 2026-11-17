@@ -469,4 +469,76 @@ brojeva?
 - Da bi se, za svaki postojeći frejm, mogao odrediti njegov par pokazivača zgodno uvezati frejmove u listu
 > Knjiga ovde ne napominje šta misli pod uvezivanjem u listu
 - Ovo se postiže tako što baza najmlađeg frejma sadrži vrednost stek pokazivača prethodnog frejma; Ta vrednost je. adresa mem. lokacije do koje je poslednji frejm napunjen
-- **VAŽNO:** Trenutni pokazivač steka sadrži adresu iste mem. lokacije kao i 
+ **VAŽNO:** Trenutni *pokazivač steka* sadrži istu adresu mem. lokacije kao i *pokazivač frejma* najmlađeg frejma
+- Frejm steka takođe sadrži i lokalne promenljive <br />
+![slika](../slike/izgled_frejma.png)<br />
+- Za pristup lokacijama frejma zgodno je koristiti indeksno adresiranje; Za početnu adresu ćemo koristiti vrednost pokazivača frejma, a za indeks relativnu udaljenost potrebne lokacije frejma od baze
+- Rukovanje frejmom vezano je za poziv potprograma, sa kojim je taj frejm povezan
+- **Pogledati primer u knjizi na strani `59.`**
+- Korišćenje steka može da uzrokuje **dinamičke greške**, od kojih je jedna nemanje dovoljno mem. lokacija za potrebe rada programa
+- **VAŽNO:** Procesor *KONCEPT* ne podržava opisani stek, zbog čega ne postoje posebne naredbe za rad sa stekom; Ukoliko bi te naredbe postojale bile bi ekvivalentne makroima *NA_STEK* i *SA_STEKA* iz knjige
+#### 3.8. Pitanja
+1. Koji programski jezici niskog i visokog nivoa postoje?
+> Niskog: Mašinski i asemblerski       Visokog: Procedurni
+2. U čemu se razlikuju asemblerski i mašinski jezici?
+> U korišćenju različitih arhitektura naredbi, gde asemblerski jezici zanemaraju format mašinskih
+3. Kada je opravdano korišćenje asemblerskog i mašinskog jezika?
+> Mašinskog: Samo kada ne postoje prevodioci za asemblerske ili procedurne jezike
+> Asemblerskog: U slučajevima koji zahtevaju da se mogućnosti računara iskoriste u potpunosti
+4. Koliki adresni prostor omogućuju 2 bita?
+> Omogućava četiri mem. lokacije
+5. Koje naredbe omogućuju aritmetiku u višestrukoj preciznosti?
+> *SABERI_P* i *ODUZMI_P*
+6. Koje naredbe u toku svog izvršavanja ne menjaju uslovne bite?
+> Uslovno upravljačke naredbe kao i **naredbe prebacivanja**
+7. Koje aritmetičke naredbe postoje?
+> *SABERI, SABERI_P, DODAJ_1, ODUZMI, ODUZMI_P, ODBIJ_1, UPOREDI*
+8. Koje naredbe za rukovanje bitima postoje?
+> *I, ILI, NE, LEVO, DESNO*
+9. Koje upravljačke naredbe postoje?
+> *SKOČI_ZA_==, SKOČI_ZA_!=, SKOČI_ZA>=, SKOČI_ZA<=,  SKOČI_ZA> , SKOČI_ZA<,  SKOČI_ZA_+-_<* i još mnoge
+10. Koje kombinacije operanada koriste naredbe prebacivanja?
+> Neposredne, direktne, registarske, posredne, indeksne
+11. Koje naredbe omogućuju otkrivanje izlaska van opsega?
+> Uslovno upravljačke naredbe 
+12. Koje naredbe imaju dva operanda?
+> Naredbe prebacivanja, sve naredbe aritmetike sem *ODBIJ_1* i *DODAJ_1*, naredbe za rad sa bitovima *I, ILI* i *NE*
+13. Koje naredbe imaju jedan operand?
+> Naredbe *ODBIJ_1, DODAJ_1, LEVO, DESNO, POZOVI*, upravljačke naredbe skokova
+14. Koje naredbe su bez operanada?
+> Naredba *NATRAG*
+15. Koje asemblerske direktive postoje?
+> *ZAUZMI, NAPUNI*, te bi se moglo reći i makroi i uslovne direktive
+16. Šta karakteriše potprogram?
+> Opis potprograma i njegovi pozivi, njegovi parametri i povratna vrednost obrade podataka
+17. Šta karakteriše makro?
+> Makro definicija i makro pozivi, kao i njegovi parametri
+18. Šta karakteriše funkciju?
+> Sve što karakteriše potprogram i činjenica da ima samo jednu povratnu vrednost
+19. Šta karakteriše proceduru?
+> Sve što karakteriše potprogram i činjenjica da može imati više ulazno-izlaznih parametara
+20. Koje asemblerske naredbe su uvedne radi asemblerskih potprograma?
+> *POZOVI, NATRAG*
+21. Šta je vezano za poziv asemblerskog potprograma?
+> Prenos argumenata, pozivanje potprograma i smeštanje povratne adrese u registar `%15`, ulazak u telo potprograma,  zauzimanje mem. lokacija za lokalne promenljive, na kraju potprograma izvršavanje naredbe *NATRAG*
+22. Šta je vezano za makro poziv?
+> Prenos argumenata i zamenu poziva sa naredbama iz njegovog tela, koju obavlja pretprocesor
+23. Kako upotreba potprograma utiče na dužinu programa i vreme njegovog
+izvršavanja?
+> Korišćenje potprograma znatno utiče na dužinu programa gde je potrebno učitati manje naredbi u memoriju u poređenju sa korišćenjem makroa, međutim tokom izvršavanja programa, izvršiće se veći broj naredbi zbog dodatnih upravljačkih naredbi *POZOVI* i *NATRAG*
+24. Kako upotreba makroa utiče na dužinu programa i vreme njegovog
+izvršavanja?
+> Umesto poziva makroa, umetnuće se naredbe iz tela makroa, zbog čega će se u memoriju učitati više naredbi i program će biti veći, međutim vreme izvršavanja će uobičajeno biti kraće, nego kod običnih potprograma, jer nema dodatnih upravljačkih naredbi *POZOVI* i NATRAG 
+25. Ko obavlja zamenu makro poziva modifikovanim naredbama iz makro
+definicija?
+> Upravlja poseban program nazvan pretprocesor
+26. Gde su definisane i kada postoje globalne promenljive?
+> Važe od trenutka svog definisanja pa do kraja izvršavanja glavnog programa
+27. Gde su definisane i kada postoje lokalne promenljive?
+> Lokalne promenljive definisane su u okviru nekog potprograma i važe od trenutka definisanja do kraja izvršavanja potprograma 
+28. Šta se smešta na stek?
+> Na steku se smeštaju argumenti i povratne adrese
+29. Kako se rukuje stekom?
+> Podaci se upisuju u posebnom redosledu tako da su upisani u jednu za drugom mem. lokacijom i čitaju se u obrnutom redosledu
+30. Šta sadrži frejm?
+> Povratnu adresu, argumente, lokalne promenljive 
