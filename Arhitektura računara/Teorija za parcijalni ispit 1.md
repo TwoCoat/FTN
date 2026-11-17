@@ -359,3 +359,45 @@ brojeva?
 - *POZOVI* ima jedan operand koji određuje adresu naredbe, i pritom menja vrednost registra `%15` u adresu **sledeće naredbe posle *SKOČI**
 - Adresa smeštena u registar `%15` naziva se  **povratna adresa**
 - *NATRAG* nema operanada; Pozivanjem ove naredbe redosled izvršavanja se vraća na naredbu čiju adresu sadrži registar`%15`; **Podrazumeva se** da registar `%15` sadrži povratnu adresu, koju je prethodno upisala naredba *POZOVI*
+#### 3.3. Asemblerski jezik *KONCEPT*
+- Opis asemblerskog jezika propisuje **sintaksu** (način sastavljanja) naredbi i određuje  **semantiku** (značenje) asemblerskih naredbi
+- Sintaksa je zadata nedvosmisleno i precizno u obliku pravila izraženih putem **EBNF** notacije
+- Ime pravile je sa leve strane strelice `->`  dok sa desne se navodi odgovarajući oblik korišćenjem već opisanih pravila
+- Razmak `" "` za odvajanje pravila; `|` za predstavljanje alternativnih delova pravila; `( )` za grupisanje delova pravila; `[ ]` za delove koji se mogu pojaviti jednom ili nijednom; `{}` za delove koji se mogu pojaviti `0, 1, n` puta
+- **Za bolje razumevanje obavezno pogledati date definicije u knjizi od strane `36.`**
+> U ovom tekstu nisu date definicije pravila  procesora *KONCEPT* zbog već opisanih u knjizi
+- Neke bitnije osobine biće ispisane ovde
+- Decimalni broj sadrži **najviše `4`** cifre
+- Heksadecimalni broj **uvek započinje** znakovima `0x`
+- Heksadecimalni broj sadrži **najviše `6` znakova** 
+- Labela sme da sadrži **najviše 30 znakova**
+- Postoje dve **asemblerske direktive** procesora *KONCEPT*, a to su **ZAUZMI** i **NAPUNi**
+- Asemblerske direktive **nisu izvršne** prirode; One za razliku od naredbi koje su upućene direktno procesoru,  direktive tokom prevošenja izazivaju zauzimanje mem. lokacija za rad
+- *ZAUZMI* zauzima broj mem. lokacija jednak vredn. njenog operanda
+- *NAPUNI* zauzima **samo `1`** mem. lokaciju i u nju upisuje vredn. koju sadrži operand
+- Nakon reči **POČETAK** i razmaka navodi se **ulazna labela**
+> POČETAK ulaz
+- Ulazna labela prethodi **ulaznoj asemblerskoj naredbi**
+> ulaz: PREBACI_NR $12, %13 (Mihajlo će razumeti)
+- Izvršavanje asemblerskih naredni prati redosled u kom su one napisane, sa postojećim izmenama usled skokova, odnosno upravljačkih naredbi
+#### 3.4. Primeri asemblerskih naredbi
+- **Pregledati i razmisliti o primerima u knjizi, počevši od `39.` strane**
+#####  Rukovanje mašinskom normalizovanom formom
+- Radićemo sa `16` bita
+- Prvi bit je bit predznaka
+- Sledećih `8` bitova predstavlja podešeni eksponent čija je konst. podešavanja jednaka `128`
+- Preostalih `7` bita sadrže `7` manje značajnih bita frakcije
+- **Ne zaboraviti da je najznačajniji bit frakcije uvek 1 i da se ne prikazuje**
+- Izmenjivanje pojedinačnih vrednosti bitova moguće je koriščenjem **maski** i odgovarajuće logičke funkcije
+#### 3.5. Potprogram
+- **Potgram** omogućuje opisivanje izračunavanje vrednosti, odnosno opisivanje rukovanja strukturama podataka, koje je odvojeno od glavnog programa
+- **Opis** potprograma prate njegovi **pozivi**
+- Ovo je veoma korisno jer možemo pozivati potprogram samo na osnovu poznavanja neophodnih parametara, bez da znamo čitavu strukturu potprograma
+- Upotreba **parametara** pomaže nam da potprogram se može izvršavati više puta, tokom kojih obrađuje različite podatke
+- Svako izvršavanje potprograma odnosi se na određene vrednosti parametara, koji se nazivaju **argumenti**
+- Izvršavanju potprograma prethodni njegov poziv i spremanje vredn. parametara
+- U pozivu potprograma se određuje povratna adresa, sa koje se učitava sledeća naredba pri završetku rada potprograma
+- U **ulaznoj tački** potprograma se zauzimaju lokacije za **lokalne promenljive**, dok se u **izlaznoj tački** ove lokacije oslobađaju
+- Lokalne promeljive potprograma se nazivaju i **dinamičke**, iz razloga što postoje samo u toku izvršavanja potprograma, za razliku od **statičkih** i **globalnih**
+- **Područje važenja** ili opseg promenljivih vezan je za deo u kom je pomenuta promenljiva opisana, ukoliko je to potprogram, ona će postojati od trenutka njihovog definisanja do kraja izvršavanja potprograma, ukoliko je to glavni program, postojaće od trenutka definisanja do kraja izvršavanja 
+- Potprogrami se dele na **funkcije** i **procedure**
