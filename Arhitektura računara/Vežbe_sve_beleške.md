@@ -139,3 +139,22 @@
 - ne proveravanje vrednosti eax nakon izvršavanja funkcije
 - korišćenje registra eax i ax istovremeno
 - **UČITAVANJE ILI ISPIS VIŠE KARAKTERA OD POTREBNIH**
+# V5
+#### Potprogrami
+- Potprogrami predstavljaju deo koda koji obavlja određeni zadatak, može se pozivati više puta i pritom sa različitih mesta
+- Po završetku izvršavanja potprograma, izvršavanje naredbi nastavlja se od prve naredbe odmah nakon poziva potprograma
+- O potprogramima bilo je više reči u [3.5. Potprogrami](https://github.com/TwoCoat/FTN/blob/main/Arhitektura%20ra%C4%8Dunara/Teorija%20za%20parcijalni%20ispit%201.md#35-potprogram)
+#### Stek x86 procesora
+- O steku je bilo više reči u  [3.7. Stek](https://github.com/TwoCoat/FTN/blob/main/Arhitektura%20ra%C4%8Dunara/Teorija%20za%20parcijalni%20ispit%201.md#37-stek)
+> **VAŽNO:** Neophodno je znati da stek raste ka nižim memorijskim adresama, te kada želimo da dodamo promenljivu na stek, mi zapravo pokazivač steka smanjujemo za onoliko prostora koliko je potrebno
+- Registar **`esp`** pokazuje na vrh stekea (stack pointer)
+- **`push`** - umanjuje esp za `4` bajta, pa na adresu iz `esp` upiše vredn. operanda
+- **`pop`** - pročita vrednost sa adrese, koja je sadržava u `esp`, i njenu vrednost upiše u operand; Za kraj poveća `esp` za `4`bajta
+> U `32`-bitnom režimo na stek se uvek smeštaju `32`-bitne vrednosti 
+#### Poziv potprograma i stek
+- **`call labela`** predstavlja poziv određenog potprograma
+- na stek ide adresa naredne naredbe; Ova adresa je zapravo povratna adresa naredbe na koju program treba da se vrati po kraju izvršavanja potprograma
+- Nakon pozivanja, izvršavanje odmah skače na labelu, tj. početak potprograma
+- **`ret`** je naredba koja kada je pozvana učitava vrednost na koju pokazuje trenutno `esp` i pokušava da tu vrednost, koja služi kao povratna adresa, skoči radi daljeg izvršavanja
+> Imati na umu da bi `ret` trebalo da se poziva nad vrednostima koje je sama `call` naredba postavila na stek; U suprotnom. velike su šanse da dođe do `segmentation fault`
+- `call` i `ret` **podrazumevano** koriste stek, iz tog razloga je neophodno da program ostavi stek onakvim kakvog ga je zatekao
