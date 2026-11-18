@@ -158,3 +158,27 @@
 - **`ret`** je naredba koja kada je pozvana učitava vrednost na koju pokazuje trenutno `esp` i pokušava da tu vrednost, koja služi kao povratna adresa, skoči radi daljeg izvršavanja
 > Imati na umu da bi `ret` trebalo da se poziva nad vrednostima koje je sama `call` naredba postavila na stek; U suprotnom. velike su šanse da dođe do `segmentation fault`
 - `call` i `ret` **podrazumevano** koriste stek, iz tog razloga je neophodno da program ostavi stek onakvim kakvog ga je zatekao
+ Potprogramu je neophodno proslediti **argumente** i od njega treba dobiti rezultat
+- Programski jezik *C* na `x86` arhitekturi korsti **cdecl** konvenciju:
+1. Parametri se stavljalju na stek od poslednjeg ka prvog, tj. kako su parametri navedeni čitajući sa desna ulevo
+2. Prvi parametar je odmah iza povratne adrese
+3. Kod koji poziva je odgovaran za stavljanje i uklanjanje argumenata
+4. Povratna vrednost je u `eax`, odnosno paru registara `edx:eax` ukoliko se radi o `64`-bitnoj
+- Ovde je nejasno objašnjeno ko šta radi, te ukratko rečeno:
+1. Pozivalac stavlja parametre na stek kako bi im potprogram mogao pristupati; Ti podaci su zapravo argumenti kojim potprogram pristupa; Nakon stavljanja na stek, poziva se potprogram i u istoj naredbi automatski stavlja povratna adresa na stek, nakon čega sledeće instrukcija za izvršavanje se nalazi u potprogramu
+2. Zadatak potprograma jeste da prvobitno sačuva vrednost registra **`ebp`** (base pointer) koji sadrži početnu adresu mem. lokacije od koje počinje **stek frejm** programa koji ga je pozvao, kako bi znao kada vrati natrag do koje mem. lokacije sme da vrši promenu podataka i obradu
+3. Ukoliko je to neophodno, potprogram može postavljati određene vrednosti na stek, međutim mora ih osloboditi u obrnutom redosledu od postavljanja na stek; Ukoliko je to potrebno, potprogram može zauzeti memoriju za lokalne promenljive, koje na kraju izvršavanja mora oslobodi u obrnutom smeru od zauzimanja; **Ukoliko se koriste registri `ebx, eip, esi` njihova vrednost se prvobitno mora sačuvati na steku, a na kraju izvršavanja ponovo upisati u registre**
+4.  Na kraju, oslobađa se stek lokalnih promenljivih, vraćaju se vrednosti u odgovarajuće registre, u `ebp` se upisuje adresa mem. lokacije početka prethodnog frejma, u `esp` se upisuje tačna adresa vrha steka, a potom poziva `ret` <br />
+ ![slika](../slike/postupak_cdecl_konvencije.png)<br />
+-  Pogledati primere sa prezentacije *05Potprogrami*
+##### Stek frejm
+- O frejmu je bilo više reči u  [3.7. Frejm ili okvir](https://github.com/TwoCoat/FTN/blob/main/Arhitektura%20ra%C4%8Dunara/Teorija%20za%20parcijalni%20ispit%201.md#frejm-ili-okvir)
+- Stek frejm predstavlja deo steka koji pripada **jednom pozivu** potprograma
+- Frejm se sastoji od argumenata, povratne adrese, vrednosti pokazivača frejma i lokalnih promenljivih 
+- **Pokazivač frejma**, čiju ulogu ima registar `ebp` pokazuje na određenu tačku frejma, odnosno mem. lokacije; Korišćenjem pokazivača frejma vrlo lako možemo adresirati, te time čitati i upisivati iz i u argumentei lokalne  promenljive
+- Memorija na steku se zauzima spuštanjem pokazivača steka naniže za `4` bita <br />
+- Sledeća slika prikazuje adresiranje i pristupanje određenim podacima
+   ![slika](../slike/primeri_prisutupanja_adresama_na_steku.png) <br/>
+##### Prenos argumenata po vrednosti i po adresi
+- **Po vrednosti** na stek se stavlja kopija vrednosti argumenata; Bilo kakva obrada ovih podataka neće promeniti vrednost izvornih promenljiivih
+- **Po adresi** se na stek postavljaju adrese promenljivih, putem kojim im se pristupa i direktno u njih upisuju podaci; Za pristup se koristi indirektno adresiranje, čime izmena menja i vrednost izvornog argumenta
