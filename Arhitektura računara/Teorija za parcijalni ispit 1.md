@@ -298,7 +298,7 @@ sistem (i obrnuto)?
 14. Koji binarni broj se dobije nakon konverzije heksadecimalnog broja 1A?
 > 11010
 15. Koja je komplement 2 predstava binarnog broja -100?
-> `-100 -> 100 -> 01100100 -> 10011011 -> 10011100`
+> `-100 -> -4 -> 4 -> 00000100 -> 11111011 -> 11111100`
 16. Da li se prilikom sabiranja binarnih brojeva 01000100 i 01110000 javlja
 izlazak van opsega (za obe interpretacije ovih brojeva)?
 >  Označeni: DA Neoznačeni: NE
@@ -306,7 +306,7 @@ izlazak van opsega (za obe interpretacije ovih brojeva)?
 brojeva?
 > ???
 18. Koja je mašinska normalizovana forma (MNF8) binarnog broja -101?
-> `-101 -> 101 -> 01100101 -> 10011010 -> 100011011`
+> `-101 -> -5 -> 5 -> 00000101 -> 11111010 -> 11111011`
 19. Koji binarni broj odgovara mašinskoj normalizovanoj formi
 11010010MNF8?
 > 
