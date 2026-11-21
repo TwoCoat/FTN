@@ -76,9 +76,9 @@
 - KOMPJUTER NE RAZUME ODUZIMANJE <br />
  ![slika](../slike/komp_2_sabiranje.png) <br />
 # V3
-#### Načini adresiranja
-<br />
-![slika](../slike/vrste_adresiranja.png)<br />
+#### Načini adresiranja <br />
+
+![slika](../slike/vrste_adresiranja.png) <br />
  - **baza i indeks su registri opšte namene**
 #### Indeksno 
  - `movl niz(, %eax, 4), %ebx` 
