@@ -98,8 +98,8 @@
 - za brže zauzimanje i popunjavanje memorije koristi se direktiva fill
 > `niz1: .fill br_elem, br_bajt, poč_vredn`
 > `niz2: .fill 10, 4, 0`
-<br />
-![slika](../slike/deljenje_mnozenje.png)<br />
+
+<br /> ![slika](../slike/deljenje_mnozenje.png)<br />
 - operacije množenja koriste registarski par eax:edx za izvršavanje i čuvanje rezultata
 - div daje izuzetak ako je delilac 0
 - pre divl postaviti edx na 0 
