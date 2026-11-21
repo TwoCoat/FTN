@@ -4,7 +4,7 @@
 - 32-bitni mikroprocesor ==LITTLE ENDIAN== 
 	> prvo se upisuje bajt najniže vrednosti 
 - Isti princip raspodele važi i za ebx, ecx, edx
-- promena ax menja i eax, nije moguće koristiti oba istovremno ![slika](../slike/addssad.svg)
+- promena ax menja i eax, nije moguće koristiti oba istovremno <br /> ![slika](../slike/addssad.svg) <br />
 
 ### Zastavice
 
@@ -50,8 +50,8 @@
 >  movl $const1+const2, %eax
 
 #### Inicijalna vrednost promenljive
-- neinicijalizovana promenljiva pokazuje na istu adresu kao naredna promenljiva
-![slika](../slike/neinicijalizovana_prom.png)
+- neinicijalizovana promenljiva pokazuje na istu adresu kao naredna promenljiva <br />
+![slika](../slike/neinicijalizovana_prom.png) <br />
 
 #### Prikaz u GDB-u
 - *p/x* heksadecimalno
@@ -65,20 +65,20 @@
 - kada broj se ne može smestitit u 32-bitni registar, možemo ga smestiti putem korišćenja više njih, te tako što ćemo deo vrednosti smestiti u prvi registar, dok ćemo drugi u viši
 - najčešće se koriste samo dvostruke preciznosti
 #### Sabiranje u dvostrukoj preciznosti
-- sabiraju se niži, te potom viši delovi
-![slika](../slike/sabiranje_visestruka_prec.png)
+- sabiraju se niži, te potom viši delovi<br />
+![slika](../slike/sabiranje_visestruka_prec.png)<br />
 - addl dodaje bez da uračunava vrednost carry zastavice
 - adcl doda vrednosti i doda jos carry zastavicu
 - kompelement dvojke ukoliko je prvi bit 1 racuna kao negativan broj
 
 - sabiranje negativnog i pozitivnog dela svodi se na to da je za pozitivni broj bit najveće vrednosti uvek 0, a ostali koji su 1 dodaju vrednost onom **pozitivnom delu**
 - kada se pozitivni deo potom sabere i doda negativnom npr -128 to se negativni deo umanjuje
-- KOMPJUTER NE RAZUME ODUZIMANJE
- ![slika](../slike/komp_2_sabiranje.png)
+- KOMPJUTER NE RAZUME ODUZIMANJE <br />
+ ![slika](../slike/komp_2_sabiranje.png) <br />
 # V3
 #### Načini adresiranja
-
-![slika](../slike/vrste_adresiranja.png)
+<br />
+![slika](../slike/vrste_adresiranja.png)<br />
  - **baza i indeks su registri opšte namene**
 #### Indeksno 
  - `movl niz(, %eax, 4), %ebx` 
@@ -92,15 +92,15 @@
 - `movl $niz, %ecx`
 - `movl $2, %eax`
 - `movl (%ecx, %eax, 4), %ebx`
-> zadnja linija se prevodi na: kreni od vrednosti koju sadrži ecx, pomeri se za eax * 4 bajtova i upiši vrednost u ebx
-
-![slika](../slike/3_adresiranja.png)
+> zadnja linija se prevodi na: kreni od vrednosti koju sadrži ecx, pomeri se za eax * 4 bajtova i upiši vrednost u ebx 
+<br />
+![slika](../slike/3_adresiranja.png) <br />
 - indeksno adresiranje radi samo za elemente do 8 bajtova
 - za brže zauzimanje i popunjavanje memorije koristi se direktiva fill
 > `niz1: .fill br_elem, br_bajt, poč_vredn`
 > `niz2: .fill 10, 4, 0`
-
-![slika](../slike/deljenje_mnozenje.png)
+<br />
+![slika](../slike/deljenje_mnozenje.png)<br />
 - operacije množenja koriste registarski par eax:edx za izvršavanje i čuvanje rezultata
 - div daje izuzetak ako je delilac 0
 - pre divl postaviti edx na 0 
@@ -120,16 +120,16 @@
 - parametri se prenose preko registra
 - različiti pozivi uzimaju različite registre
 - u eax se upisuje broj sistemskog poziva
-- READ
-![slika](../slike/read.png)
+- READ <br />
+![slika](../slike/read.png) <br />
 - rezultat poziva se upisuje u eax
 - **poziv read učitava %edx karaktera, read ne dodaje \0 na kraj niske**
-- WRITE
-![slika](../slike/write.png)
+- WRITE <br />
+![slika](../slike/write.png) <br />
 - eax sadrži broj ispisanih znakova
 - write ne prepoznaje \0 - ispisuje onoliko karaktera koja je vrednost edx
-- EXIT
- ![slika](../slike/exit.png)
+- EXIT <br />
+ ![slika](../slike/exit.png) <br />
 - naredba `lea` učitava adresu promenljive u registar
 - adresa se računa dinamički, tj. u toku izvršavanja
 > `lea str, %eax`
@@ -176,8 +176,8 @@
 - Stek frejm predstavlja deo steka koji pripada **jednom pozivu** potprograma
 - Frejm se sastoji od argumenata, povratne adrese, vrednosti pokazivača frejma i lokalnih promenljivih 
 - **Pokazivač frejma**, čiju ulogu ima registar `ebp` pokazuje na određenu tačku frejma, odnosno mem. lokacije; Korišćenjem pokazivača frejma vrlo lako možemo adresirati, te time čitati i upisivati iz i u argumentei lokalne  promenljive
-- Memorija na steku se zauzima spuštanjem pokazivača steka naniže za `4` bita <br />
-- Sledeća slika prikazuje adresiranje i pristupanje određenim podacima
+- Memorija na steku se zauzima spuštanjem pokazivača steka naniže za `4` bita 
+- Sledeća slika prikazuje adresiranje i pristupanje određenim podacima <br />
    ![slika](../slike/primeri_prisutupanja_adresama_na_steku.png) <br/>
 ##### Prenos argumenata po vrednosti i po adresi
 - **Po vrednosti** na stek se stavlja kopija vrednosti argumenata; Bilo kakva obrada ovih podataka neće promeniti vrednost izvornih promenljiivih
@@ -204,8 +204,8 @@
 - Nakon toga viši deo se uvećava samo za **vrednost prenosa**, tj `carry` zastavice <br/>
 ![slika](../slike/negacija_dvostruka_preciznost.png)<br/>
 #### Naredbe za pomeranje
-- Pomeranje za `n` mesta ulevo ili udesno predstavlja množenje sa 2^n ili deljenje sa 2^n
-![slika](../slike/pomeranje_naredbe.png)
+- Pomeranje za `n` mesta ulevo ili udesno predstavlja množenje sa 2^n ili deljenje sa 2^n <br />
+![slika](../slike/pomeranje_naredbe.png) <br />
 - ukoliko je neophodno sačuvati znak operanda, koristi se naredba `sar`
 - `shl` (shift left) - pomera sve bitove za jedno mesto ulevo, najznačajniji bit odlazi u `carry`; Na mesto najmanje značajnog dolazi `0`<br/>
   ![slika](../slike/shl_prikaz.png) <br/>
@@ -215,7 +215,7 @@
    ![slika](../slike/sar_prikaz.png)<br />
 #### Naredbe za rotiranje
 - Kod rotiranja se nijedan bit ne gubi - bit koji odlazi u `carry` upisuje se sa druge strane <br />
-![slika](../slike/rotiranje_naredbe.png)<br />
+![slika](../slike/rotiranje_naredbe.png) <br />
 - `rol` (rotate left) - svi bitovi se pomeraju ulevo, najznačajniji bit odlazi u `carry`, potom se upisuje na mesto najmanje značajnog bita <br / >
  ![slika](../slike/rol_prikaz.png) <br/>
  - `ror` (rotate right) - svi bitovi se pomeraju udesno, najmanje značajan odlazi u `carry`, te se vrednost upisuje na najviše značajan bit <br />
@@ -224,7 +224,7 @@
  - `rcr` (rotate carry right) - radi isto što i `ror`, samo na mesto najznačajnijeg upisuje **staru vredn.  `carry` zastavice**, a potom vredn. najmanje značajnog bita upisuje u `carry`
 #### Pomeranje i rotiranje u dvostrukoj preciznosti
 <br/>
-![slika](../slike/Pasted image 20261119133309.png)
+![slika](../slike/rot_dvostruka.png)
 <br/>
 #### Kotrolna suma i paritet
 - Pri prenosu podataka moguće je doći do greške, te je neophodno nekako proveriti da li su dobijeni podaci ispravni
@@ -235,11 +235,11 @@
 > Nedostatak: paran broj promenjenih bita se ne otkriva.
 - Neparan broj jedinica -> `1` bit pariteta
 - Paran broj jedinica -> `0` bit pariteta <br />
-![slika](../slike/Pasted image 20261119134251.png)
+![slika](../slike/horz_paritet.png)
 <br />
 #### Vertikalni paritet
 - Koristi se kontrola suma za podatke **kao celinu**
 - Broje se jedinice na istom indeksu u svim podacima
 - Bit pariteta za tu kolonu smešta se u bit kontrolne sume sa istim indeksom <br />
-![slika](../slike/Pasted image 20261119134441.png) <br />
+![slika](../slike/vert_paritet.png) <br />
 - **Ogromni nedostatak** kod ovakih načina provere jeste paran broj promenjenih bita, koji se neće otkriti
