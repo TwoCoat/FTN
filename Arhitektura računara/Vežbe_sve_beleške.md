@@ -92,8 +92,7 @@
 - `movl $niz, %ecx`
 - `movl $2, %eax`
 - `movl (%ecx, %eax, 4), %ebx`
-> zadnja linija se prevodi na: kreni od vrednosti koju sadrži ecx, pomeri se za eax * 4 bajtova i upiši vrednost u ebx 
-<br />
+> zadnja linija se prevodi na: kreni od vrednosti koju sadrži ecx, pomeri se za eax * 4 bajtova i upiši vrednost u ebx <br />
 ![slika](../slike/3_adresiranja.png) <br />
 - indeksno adresiranje radi samo za elemente do 8 bajtova
 - za brže zauzimanje i popunjavanje memorije koristi se direktiva fill
