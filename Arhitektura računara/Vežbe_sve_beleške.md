@@ -76,9 +76,9 @@
 - KOMPJUTER NE RAZUME ODUZIMANJE <br />
  ![slika](../slike/komp_2_sabiranje.png) <br />
 # V3
-#### Načini adresiranja
-<br />
-![slika](../slike/vrste_adresiranja.png)<br />
+#### Načini adresiranja <br />
+
+![slika](../slike/vrste_adresiranja.png) <br />
  - **baza i indeks su registri opšte namene**
 #### Indeksno 
  - `movl niz(, %eax, 4), %ebx` 
@@ -92,15 +92,14 @@
 - `movl $niz, %ecx`
 - `movl $2, %eax`
 - `movl (%ecx, %eax, 4), %ebx`
-> zadnja linija se prevodi na: kreni od vrednosti koju sadrži ecx, pomeri se za eax * 4 bajtova i upiši vrednost u ebx 
-<br />
+> zadnja linija se prevodi na: kreni od vrednosti koju sadrži ecx, pomeri se za eax * 4 bajtova i upiši vrednost u ebx <br />
 ![slika](../slike/3_adresiranja.png) <br />
 - indeksno adresiranje radi samo za elemente do 8 bajtova
 - za brže zauzimanje i popunjavanje memorije koristi se direktiva fill
 > `niz1: .fill br_elem, br_bajt, poč_vredn`
 > `niz2: .fill 10, 4, 0`
-<br />
-![slika](../slike/deljenje_mnozenje.png)<br />
+
+<br /> ![slika](../slike/deljenje_mnozenje.png)<br />
 - operacije množenja koriste registarski par eax:edx za izvršavanje i čuvanje rezultata
 - div daje izuzetak ako je delilac 0
 - pre divl postaviti edx na 0 
@@ -169,7 +168,7 @@
 2. Zadatak potprograma jeste da prvobitno sačuva vrednost registra **`ebp`** (base pointer) koji sadrži početnu adresu mem. lokacije od koje počinje **stek frejm** programa koji ga je pozvao, kako bi znao kada vrati natrag do koje mem. lokacije sme da vrši promenu podataka i obradu
 3. Ukoliko je to neophodno, potprogram može postavljati određene vrednosti na stek, međutim mora ih osloboditi u obrnutom redosledu od postavljanja na stek; Ukoliko je to potrebno, potprogram može zauzeti memoriju za lokalne promenljive, koje na kraju izvršavanja mora oslobodi u obrnutom smeru od zauzimanja; **Ukoliko se koriste registri `ebx, eip, esi` njihova vrednost se prvobitno mora sačuvati na steku, a na kraju izvršavanja ponovo upisati u registre**
 4.  Na kraju, oslobađa se stek lokalnih promenljivih, vraćaju se vrednosti u odgovarajuće registre, u `ebp` se upisuje adresa mem. lokacije početka prethodnog frejma, u `esp` se upisuje tačna adresa vrha steka, a potom poziva `ret` <br />
- ![slika](../slike/postupak_cdecl_konvencije.png)<br />
+ <br /> ![slika](../slike/postupak_cdecl_konvencije.png) <br />
 -  Pogledati primere sa prezentacije *05Potprogrami*
 ##### Stek frejm
 - O frejmu je bilo više reči u  [3.7. Frejm ili okvir](https://github.com/TwoCoat/FTN/blob/main/Arhitektura%20ra%C4%8Dunara/Teorija%20za%20parcijalni%20ispit%201.md#frejm-ili-okvir)
@@ -177,8 +176,8 @@
 - Frejm se sastoji od argumenata, povratne adrese, vrednosti pokazivača frejma i lokalnih promenljivih 
 - **Pokazivač frejma**, čiju ulogu ima registar `ebp` pokazuje na određenu tačku frejma, odnosno mem. lokacije; Korišćenjem pokazivača frejma vrlo lako možemo adresirati, te time čitati i upisivati iz i u argumentei lokalne  promenljive
 - Memorija na steku se zauzima spuštanjem pokazivača steka naniže za `4` bita 
-- Sledeća slika prikazuje adresiranje i pristupanje određenim podacima <br />
-   ![slika](../slike/primeri_prisutupanja_adresama_na_steku.png) <br/>
+- Sledeća slika prikazuje adresiranje i pristupanje određenim podacima 
+  <br /> ![slika](../slike/primeri_prisutupanja_adresama_na_steku.png) <br/>
 ##### Prenos argumenata po vrednosti i po adresi
 - **Po vrednosti** na stek se stavlja kopija vrednosti argumenata; Bilo kakva obrada ovih podataka neće promeniti vrednost izvornih promenljiivih
 - **Po adresi** se na stek postavljaju adrese promenljivih, putem kojim im se pristupa i direktno u njih upisuju podaci; Za pristup se koristi indirektno adresiranje, čime izmena menja i vrednost izvornog argumenta
@@ -195,37 +194,36 @@
 - Pogledati primere sa prezentacije, dok ćemo ovde opisati neka od ponašanja
 - `and` - gde god je  u maski `0`, taj bit će sigurno u rezultatu biti `0` bez obzira na bit originala; U ovoj naredbi, bit sa vrednošću `1` je neutralan za rezultat 
 - `or` - gde god je u maski `1`, taj bit će zasigurno u rezultati imati vredn. `1`; Za naredbu `or` neutralni element je `0`
-- `xor` - gde god je u maski vredn. bita `1`, u rezultatu će biti obrnuta vredn. od bita originala; Ovde je neutralni element vredn. `0` za bitove maske <br />
- ![slika](../slike/xor_primer.png) <br />
+- `xor` - gde god je u maski vredn. bita `1`, u rezultatu će biti obrnuta vredn. od bita originala; Ovde je neutralni element vredn. `0` za bitove maske 
+ <br /> ![slika](../slike/xor_primer.png) <br />
  - `test` - maska se uvek sastoji od `0` i jedne `1`, kako bi se određeni bit proverio, i to putem provere vrednosti `z` nakon izvršavanja naredbe
 #### Negacija
 - U dvostrukoj preciznosti negacija u kompl. `2` predstavi iziskuje da se prvobitno komplementiraju niži i viši deo, korišćenjem naredbe `not`
 - Potom se prvo niži deo uvećava za `1`
-- Nakon toga viši deo se uvećava samo za **vrednost prenosa**, tj `carry` zastavice <br/>
-![slika](../slike/negacija_dvostruka_preciznost.png)<br/>
+- Nakon toga viši deo se uvećava samo za **vrednost prenosa**, tj `carry` zastavice 
+<br /> ![slika](../slike/negacija_dvostruka_preciznost.png)<br/>
 #### Naredbe za pomeranje
-- Pomeranje za `n` mesta ulevo ili udesno predstavlja množenje sa 2^n ili deljenje sa 2^n <br />
-![slika](../slike/pomeranje_naredbe.png) <br />
+- Pomeranje za `n` mesta ulevo ili udesno predstavlja množenje sa 2^n ili deljenje sa 2^n 
+<br /> ![slika](../slike/pomeranje_naredbe.png) <br />
 - ukoliko je neophodno sačuvati znak operanda, koristi se naredba `sar`
-- `shl` (shift left) - pomera sve bitove za jedno mesto ulevo, najznačajniji bit odlazi u `carry`; Na mesto najmanje značajnog dolazi `0`<br/>
-  ![slika](../slike/shl_prikaz.png) <br/>
- - `shr` (shift right) - kontra od `shl`, svi bitovi za jedno mesto udesno, na mesto najznačajnijeg dolazi `0`, vredn. najmanje značajnog bita odlazi u `carry`<br />
-![slika](../slike/shr_prikaz.png) <br />
- - `sar` (shift arithmetical right) - ne menja vredn. najznačajnijeg bita, njegovu vrednost pomera udesno, najmanje značajan odlazi u `carry` <br />
-   ![slika](../slike/sar_prikaz.png)<br />
+- `shl` (shift left) - pomera sve bitove za jedno mesto ulevo, najznačajniji bit odlazi u `carry`; Na mesto najmanje značajnog dolazi `0`
+ <br /> ![slika](../slike/shl_prikaz.png) <br/>
+ - `shr` (shift right) - kontra od `shl`, svi bitovi za jedno mesto udesno, na mesto najznačajnijeg dolazi `0`, vredn. najmanje značajnog bita odlazi u `carry`
+<br /> ![slika](../slike/shr_prikaz.png) <br />
+ - `sar` (shift arithmetical right) - ne menja vredn. najznačajnijeg bita, njegovu vrednost pomera udesno, najmanje značajan odlazi u `carry` 
+<br /> ![slika](../slike/sar_prikaz.png)<br />
 #### Naredbe za rotiranje
 - Kod rotiranja se nijedan bit ne gubi - bit koji odlazi u `carry` upisuje se sa druge strane <br />
 ![slika](../slike/rotiranje_naredbe.png) <br />
-- `rol` (rotate left) - svi bitovi se pomeraju ulevo, najznačajniji bit odlazi u `carry`, potom se upisuje na mesto najmanje značajnog bita <br / >
- ![slika](../slike/rol_prikaz.png) <br/>
- - `ror` (rotate right) - svi bitovi se pomeraju udesno, najmanje značajan odlazi u `carry`, te se vrednost upisuje na najviše značajan bit <br />
- ![slika](../slike/ror_prikaz.png) <br />
+- `rol` (rotate left) - svi bitovi se pomeraju ulevo, najznačajniji bit odlazi u `carry`, potom se upisuje na mesto najmanje značajnog bita 
+ <br /> ![slika](../slike/rol_prikaz.png) <br/>
+ - `ror` (rotate right) - svi bitovi se pomeraju udesno, najmanje značajan odlazi u `carry`, te se vrednost upisuje na najviše značajan bit 
+ <br /> [slika](../slike/ror_prikaz.png) <br />
  - `rcl` (rotate carry left) - radi isto što i `rol`, samo što na mesto najmanje značajnog upisuje **staru vredn. `carry` zastavice**, a potom upisuje u `carry` vrednost najznačajnijeg bita pre rotacije
  - `rcr` (rotate carry right) - radi isto što i `ror`, samo na mesto najznačajnijeg upisuje **staru vredn.  `carry` zastavice**, a potom vredn. najmanje značajnog bita upisuje u `carry`
 #### Pomeranje i rotiranje u dvostrukoj preciznosti
-<br/>
-![slika](../slike/rot_dvostruka.png)
-<br/>
+
+<br/> ![slika](../slike/rot_dvostruka.png) <br/>
 #### Kotrolna suma i paritet
 - Pri prenosu podataka moguće je doći do greške, te je neophodno nekako proveriti da li su dobijeni podaci ispravni
 - Za potrebe provere koristi se **kontrolna suma** (checksum)
@@ -234,12 +232,11 @@
 - Bit pariteta se obično smešta na najviše mesto – podaci tada imaju bit manje, a svaki bajt ima paran broj jedinica. 
 > Nedostatak: paran broj promenjenih bita se ne otkriva.
 - Neparan broj jedinica -> `1` bit pariteta
-- Paran broj jedinica -> `0` bit pariteta <br />
-![slika](../slike/horz_paritet.png)
-<br />
+- Paran broj jedinica -> `0` bit pariteta 
+<br /> ![slika](../slike/horz_paritet.png) <br />
 #### Vertikalni paritet
 - Koristi se kontrola suma za podatke **kao celinu**
 - Broje se jedinice na istom indeksu u svim podacima
-- Bit pariteta za tu kolonu smešta se u bit kontrolne sume sa istim indeksom <br />
-![slika](../slike/vert_paritet.png) <br />
+- Bit pariteta za tu kolonu smešta se u bit kontrolne sume sa istim indeksom 
+<br /> ![slika](../slike/vert_paritet.png) <br />
 - **Ogromni nedostatak** kod ovakih načina provere jeste paran broj promenjenih bita, koji se neće otkriti
